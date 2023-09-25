@@ -3,6 +3,7 @@ from tkinter import Image
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.applications.imagenet_utils import decode_predictions
+import googletrans
 
 def read_imagefile(file) -> Image.Image:
     image = Image.open(BytesIO(file))
@@ -26,3 +27,7 @@ def predict(image: Image.Image):
         resp["confidence"] = f"{res[2]*100:0.2f} %"
         response.append(resp)
     return response
+
+def translate_to_kr(str: str):
+    translator = googletrans.Translator()
+    return translator.translate(str, dest='ko')
