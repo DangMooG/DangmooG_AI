@@ -1,9 +1,21 @@
-import uvicorn
 from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from application.components import predict, read_imagefile, translate_to_kr
 from price_prediction_mvp import *
 
-app = FastAPI(title="Dangmuzi-AI")
+app = FastAPI(title="Dangmuzi-AI", debug=True)
+
+origins = [
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/predict/what_item_image")
@@ -24,6 +36,3 @@ async def predict_api(file: UploadFile = File(...)):
     results = get_results_list(trend_price, recommend_price, lower_price)
     return results
 
-
-if __name__ == "__main__":
-    uvicorn.run(app, debug=True)
