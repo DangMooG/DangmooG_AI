@@ -6,7 +6,7 @@ from brisque import BRISQUE
 
 def get_brisque_score(img_path):
     obj = BRISQUE(url=False)
-    alpha = round(obj.score(img)/100, 3)
+    alpha = round(obj.score(img_path)/100, 3)
     return alpha
 
 def scrapp_joogna(product_name):
@@ -41,6 +41,7 @@ def get_results_list(upper, recommend, lower) -> list:
     return list(results)
 
     
+"""
 if __name__ == '__main__':
     path = './original-scaled-image.jpg'
     img = PIL.Image.open(path)
@@ -51,3 +52,4 @@ if __name__ == '__main__':
     recommend_price = get_rec_price(trend_price, lower_price, alpha)
     results = get_results_list(trend_price, recommend_price, lower_price)
     print(results)
+"""

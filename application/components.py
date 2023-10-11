@@ -1,5 +1,5 @@
 from io import BytesIO
-from tkinter import Image
+from PIL import Image
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.applications.imagenet_utils import decode_predictions
