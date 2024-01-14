@@ -1,0 +1,16 @@
+version: "3"
+services:
+  dangmoog:
+    image: dangmoog
+    build:
+      context: . # microservice를 제작할 폴더 지정
+      dockerfile: Dockerfile
+    container_name: dangmoog # 생성될 때 생기는 이름
+    ports:
+      - "8000:80" # 외부 포트:컨테이너 포트
+    environment:
+      - OPEN_AI_API_KEY=
+      - NAVER_ID=
+      - NAVER_SECRET=
+    restart: "always"
+
