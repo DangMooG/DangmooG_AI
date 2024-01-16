@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 openai_api_key = os.environ.get('OPEN_AI_API_KEY')
 
+
 def get_product_name(title: str, openai_api_key) -> str:
     llm = ChatOpenAI(temperature=0, model_name='gpt-3.5-turbo', openai_api_key=openai_api_key, max_tokens=100)
     template = """
@@ -18,7 +19,25 @@ def get_product_name(title: str, openai_api_key) -> str:
     prompt_template = PromptTemplate(input_variables=["title"], template=template)
     chain = LLMChain(llm=llm, prompt=prompt_template)
     
-    product_name = (chain.invoke(input={'title':title})['text'])
+    product_name = (chain.invoke(input={'title': title})['text'])
+    assert type(product_name) == str
+    return product_name
+
+
+def get_product_name_with_description(title: str, description: str, openai_api_key: str) -> str:
+    llm = ChatOpenAI(temperature=0, model_name='gpt-3.5-turbo', openai_api_key=openai_api_key, max_tokens=100)
+    template = """
+    I want you to get the product name from the title.
+    Also, you may need to get information about the product size from the description.
+    title: {title}
+    description: {description}
+    Your answer should only a '[size] [product name]' form.
+    If you don't have information about size, just product name.
+    """
+    prompt_template = PromptTemplate(input_variables=["title"], template=template)
+    chain = LLMChain(llm=llm, prompt=prompt_template)
+
+    product_name = (chain.invoke(input={'title': title, 'description': description})['text'])
     assert type(product_name) == str
     return product_name
 
