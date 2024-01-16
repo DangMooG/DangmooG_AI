@@ -96,7 +96,7 @@ async def predict_api(title: str, photo: UploadFile = File(...)) -> list:
 
 
 @app.post(
-    "/predict/get_price",
+    "/predict/get_price_v2",
     name="가격 추천 획득 beta version 2",
     description="글의 제목을 title에 넣고, 추가로 내용을 description에 넣고, 게시물의 대표사진 1개를 photo 항목에 전송하면 됩니다."
                 "\n\n"
