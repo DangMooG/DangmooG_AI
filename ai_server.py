@@ -5,7 +5,6 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from application.nvshopping import get_search_url, get_result_page, get_mean_price_nv
 from application.joongna import scrap_joogna_price
-from application.llm_agent import get_product_name, get_product_name_with_description
 
 
 openai_api_key = os.environ.get('OPEN_AI_API_KEY')  # openai api key
@@ -53,26 +52,20 @@ app.add_middleware(
 
 
 @app.post(
-    "/predict/get_price_v3",
-    name="가격 추천 획득 beta version 3",
-    description="글의 제목을 title에 넣고, 추가로 내용을 description에 넣고 전송하면 됩니다."
+    "/predict/get_price",
+    name="가격 추천 획득 beta version",
+    description="글의 제목을 title에 넣어주기만 하면 됩니다."
                 "\n\n"
                 "결과는 가격의 리스트 형태로 반환됩니다."
 )
-async def predict_api(title: str, description: str) -> list:
-    product = get_product_name_with_description(
-        title=title,
-        description=description,
-        openai_api_key=openai_api_key
-    )  # 상품명 - 검색가능한 형태
-
+async def predict_api(title: str) -> list:
     alpha = 0.5
 
-    url = get_search_url(product, 1, 5)
+    url = get_search_url(title, 1, 5)
     result = get_result_page(url, client_id, client_secret)
     new_mean_price = get_mean_price_nv(result)  # 새상품 기준 평균가
 
-    trend_price, lower_price = scrap_joogna_price(product)
+    trend_price, lower_price = scrap_joogna_price(title)
     if trend_price != 0:
         if new_mean_price >= trend_price:
             upper_price = get_rec_price(new_mean_price, trend_price, alpha)
